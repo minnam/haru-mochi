@@ -1,0 +1,24 @@
+{
+  "name": "termiyou",
+  "version": "0.0.0",
+  "description": "Flexible command prompt application builder written in Javascript",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/minnam/termiyou.git"
+  },
+  "author": "Min Nam",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/minnam/termiyou/issues"
+  },
+  "homepage": "https://github.com/minnam/termiyou#readme",
+  "dependencies": {
+    "check-types": "^7.4.0",
+    "get-cursor-position": "^1.0.5",
+    "graceful-fs": "^4.1.11"
+  }
+}
