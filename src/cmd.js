@@ -1,17 +1,17 @@
 const readline = require('readline')
-const getCursorPosition = require('get-cursor-position');
+const size = require('window-size')
 
 const CMD = {
   interface: readline.createInterface({ input: process.stdin, output: process.stdout, historySize: 0 }),
   clearOffset: 2,
   clear: line => {
-    const pos = getCursorPosition.sync();
+    const rowPos = size.height
 
-    if (process.stdout.rows < pos.row) {
+    if (process.stdout.rows < rowPos) {
       readline.cursorTo(process.stdout, 0, process.stdout.rows - (line + CMD.clearOffset))
       // console.log(process.stdout.rows, pos.row - 5)
     } else {
-      readline.cursorTo(process.stdout, 0, pos.row - (line + CMD.clearOffset))
+      readline.cursorTo(process.stdout, 0, rowPos - (line + CMD.clearOffset))
     }
 
   },

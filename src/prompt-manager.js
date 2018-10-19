@@ -78,6 +78,7 @@ class PromptManager {
       this.draw()
     } else {
       // Finished prompts
+      CMD.write('')
       process.stdin.unref()
       this._done(this.getData())
       process.stdout.clearLine()

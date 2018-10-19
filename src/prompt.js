@@ -1,7 +1,7 @@
-const CMD = require('./cmd')
 const check = require('check-types')
-const Color = require('./color')
-const INPUT_BLACKLIST = require('./input-blacklist')
+const CMD  = require('./cmd')
+const Color  = require('./color')
+const INPUT_BLACKLIST  = require('./input-blacklist')
 
 class Prompt {
   constructor (props) {

@@ -20,7 +20,10 @@ const config = {
         },
         {
           name: 'Hello 2'
-        }
+        },
+        {
+          name: 'Hello 3'
+        },
       ]
     },
     {

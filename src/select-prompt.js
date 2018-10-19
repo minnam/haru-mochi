@@ -30,6 +30,8 @@ class SelectPrompt extends Prompt {
       this.draw()
       break
     case 'return':
+      CMD.clear(this.items.length + 2)
+      this.draw()
       this.proceed()
       break
     default:

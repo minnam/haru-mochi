@@ -1,14 +1,30 @@
-const config          = require('./example-config.js')
-const PromptManager   = require('./src/prompt-manager')
-const SelectPrompt    = require('./src/select-prompt')
-const MessagePrompt   = require('./src/message-prompt')
+const fs  = require('fs')
+const path  = require('path')
 
+const MessagePrompt  = require('./message-prompt')
+
+const config           = require('../example-config.js')
+const PromptManager    = require('./prompt-manager')
+const SelectPrompt     = require('./select-prompt')
+
+
+// console.log(`${__dirname}/${process.argv[2]}`)
 
 /* Main ========================================================================================= */
 const start = () => {
   const pm = new PromptManager()
+  let config
 
-  if (config.prompts && config.prompts.length > 0) {
+  try {
+    if (process.argv[2]) {
+      // const foo = await import(`${__dirname}/${process.argv[2]}`);
+      config = require(fs.realpathSync(process.argv[2]))
+    }
+  } catch (e) {
+    console.log(e)
+  }
+  
+  if (config && config.prompts && config.prompts.length > 0) {
     config.prompts.map(prompt => {
       switch (prompt.type) {
         case 'text':
@@ -20,12 +36,10 @@ const start = () => {
           new SelectPrompt(
             prompt,
             prompt.items.map(item => {
-              commitType = {
+              return {
                 ...prompt.defaultItem,
                 ...item
               }
-        
-              return commitType
             })
           )
         )
@@ -39,8 +53,8 @@ const start = () => {
     }
   })
   pm.start()
+    
 }
-
 
 start()
 

@@ -4,7 +4,12 @@
   "description": "Flexible command prompt application builder written in Javascript",
   "main": "index.js",
   "scripts": {
+    "start": "node ./src/index.js",
+    "build": "webpack --config ./webpack.config.js --mode production",
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "bin": {
+    "termiyou": "bin/termiyou.js"
   },
   "repository": {
     "type": "git",
@@ -18,7 +23,8 @@
   "homepage": "https://github.com/minnam/termiyou#readme",
   "dependencies": {
     "check-types": "^7.4.0",
-    "get-cursor-position": "^1.0.5",
-    "graceful-fs": "^4.1.11"
+    "console-pos": "^1.0.2",
+    "g": "^2.0.1",
+    "window-size": "^1.1.1"
   }
 }
