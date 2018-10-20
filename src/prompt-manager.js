@@ -1,10 +1,11 @@
-const CMD = require('./cmd')
+const CMD = require('./common/cmd')
 
 class PromptManager {
-  constructor () {
+  constructor (props) {
     this.index = 0
     this.prompts = []
     this.data = null
+    this.description = props.description
 
     this.handleData =  (data) => {
       if (this.index !== null && this.prompts[this.index].handleData) {
@@ -17,7 +18,6 @@ class PromptManager {
         this.prompts[this.index].handleKeypress(str, key)
       }
     }
-
   }
 
   getData () {
@@ -36,7 +36,12 @@ class PromptManager {
   }
 
   start () {
-    // CMD.clear()
+    // console.log(intro)
+    if (this.description) {
+      CMD.write(this.description)
+      CMD.write('')
+    }
+
     this.draw()
   }
 
@@ -69,20 +74,20 @@ class PromptManager {
 
   next (i) {
     this.reset()
-    // if (this.index + 1 < this.prompts.length) {
+    CMD.write('')
+
     if (this.index + i < this.prompts.length) {
       process.stdout.clearLine()
-      // this.index++
       this.index += i
       this.reset()
       this.draw()
     } else {
       // Finished prompts
-      CMD.write('')
       process.stdin.unref()
-      this._done(this.getData())
       process.stdout.clearLine()
       this.index = null
+      this._done(this.getData())
+      // process.exit(0)
     }
   }
 

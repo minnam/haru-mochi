@@ -1,36 +1,27 @@
 const fs  = require('fs')
 const path  = require('path')
 
-const MessagePrompt  = require('./message-prompt')
+const PromptManager = require('./prompt-manager')
 
-const config           = require('../example-config.js')
-const PromptManager    = require('./prompt-manager')
-const SelectPrompt     = require('./select-prompt')
+const TextPrompt = require('./prompts/text-prompt')
+const SelectPrompt = require('./prompts/select-prompt')
 
 
 // console.log(`${__dirname}/${process.argv[2]}`)
 
 /* Main ========================================================================================= */
-const start = () => {
-  const pm = new PromptManager()
-  let config
 
-  try {
-    if (process.argv[2]) {
-      // const foo = await import(`${__dirname}/${process.argv[2]}`);
-      config = require(fs.realpathSync(process.argv[2]))
-    }
-  } catch (e) {
-    console.log(e)
-  }
+const prompt = config => {
+  const pm = new PromptManager({
+    description: config.description
+  })
   
   if (config && config.prompts && config.prompts.length > 0) {
     config.prompts.map(prompt => {
       switch (prompt.type) {
         case 'text':
-        pm.push(new MessagePrompt(prompt))
+        pm.push(new TextPrompt(prompt))
         break;
-
         case 'select':
         pm.push(
           new SelectPrompt(
@@ -53,6 +44,58 @@ const start = () => {
     }
   })
   pm.start()
+}
+
+const start = () => {
+  let config
+
+  if (process.argv[2]) {
+    const path = fs.realpathSync(process.argv[2])
+    // const foo = await import(`${__dirname}/${process.argv[2]}`);
+    if (fs.lstatSync(process.argv[2]).isDirectory()) {
+      fs. readdir(path, (err, items) => {
+        if (err) {
+          return err
+        }
+
+        const tsConfigFiles = []
+
+        items.map(item => {
+          if (item.includes('.ty.')) {
+            const itemConfig = require(`${path}/${item}`)
+            tsConfigFiles.push({
+              name: itemConfig.title,
+              config: itemConfig
+            })
+          }
+        })
+
+        prompt({
+          prompts: [
+            {
+              type: 'select',
+              message: 'Select CLI',
+              key: 'model',
+              validations: null,
+              defaultItem: {
+                
+              },
+              items: tsConfigFiles
+            }
+          ],
+          done: (data) => {
+            prompt(data.model.config)
+          }
+        })
+
+      })
+      return 
+    } else {
+      config = require(fs.realpathSync(process.argv[2]))
+    }
+
+    prompt(config)
+  }
     
 }
 

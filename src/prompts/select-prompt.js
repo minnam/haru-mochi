@@ -1,6 +1,6 @@
-const CMD = require('./cmd')
 const Prompt = require('./prompt')
-const Color = require('./color')
+const CMD = require('../common/cmd')
+const Color = require('../common/color')
 
 class SelectPrompt extends Prompt {
   constructor (props, items) {
@@ -19,29 +19,28 @@ class SelectPrompt extends Prompt {
         this.index = this.index - 1
       }
 
-      CMD.clear(this.items.length + 1)
+      CMD.clear(this.items.length)
       this.draw()
       break
     case 'down':
       this.index = this.index + 1
       this.index = this.index % this.items.length
 
-      CMD.clear(this.items.length + 1)
+      CMD.clear(this.items.length)
       this.draw()
       break
     case 'return':
-      CMD.clear(this.items.length + 2)
+      CMD.clear(this.items.length + 1)
       this.draw()
       this.proceed()
       break
     default:
-      CMD.clear(this.items.length + 1)
+      CMD.clear(this.items.length)
       this.draw()
     }
   }
 
   draw () {
-    this.writeNewLine()
     this.prompt()
 
     if(this.items) {

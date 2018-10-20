@@ -1,6 +1,6 @@
 const Prompt = require('./prompt')
 
-class MessagePrompt extends Prompt {
+class TextPrompt extends Prompt {
   constructor (props) {
     super(props)
     this.isRaw = false
@@ -18,21 +18,23 @@ class MessagePrompt extends Prompt {
         const second = this.data.slice(this.cursor + 1, this.data.length)
 
         this.data = first + second
-        this.cursorFlag = false
+
+        if (this.cursorFlag) {
+          this.cursor--
+        }
       }
       break
-    case '\u001b[D':
+    case '\u001b[D': // Arrow Left  
       this.cursor--
       this.cursorFlag = true
       break
-    case '\u001b[C':
+    case '\u001b[C': // Arrow Right
       this.cursor++
       this.cursorFlag = true
       break
     case '\r':
       break
-    default:
-
+    default: // Normal keys
       if (!this.cursorFlag) {
         this.data += input
         this.cursor = this.data.length - 1
@@ -41,6 +43,11 @@ class MessagePrompt extends Prompt {
         const second = this.data.slice(this.cursor + 1, this.data.length)
 
         this.data = first + input + second
+
+        if (this.cursorFlag) {
+          this.cursor++
+        }
+
         this.cursorFlag = false
       }
     }
@@ -55,9 +62,8 @@ class MessagePrompt extends Prompt {
   }
 
   draw () {
-    this.writeNewLine()
     this.prompt()
   }
 }
 
-module.exports = MessagePrompt
+module.exports = TextPrompt

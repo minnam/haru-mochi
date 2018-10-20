@@ -1,13 +1,14 @@
 const check = require('check-types')
-const CMD  = require('./cmd')
-const Color  = require('./color')
-const INPUT_BLACKLIST  = require('./input-blacklist')
+const CMD  = require('../common/cmd')
+const Color  = require('../common/color')
+const INPUT_BLACKLIST  = require('../common/input-blacklist')
 
 class Prompt {
   constructor (props) {
     this.index = 0
     this.message = props.message
     this.key = props.key
+    this.default = props.default
     this.validations = props.validations || []
     this.data = ''
     this.done = props.done
@@ -20,28 +21,39 @@ class Prompt {
       CMD.clear(1)
     }
 
-    CMD.write(`${this.message} ${this.color.red(error) || ''}`)
+    if (this.default) {
+      CMD.write(`${this.message} ${this.color.grey(`(${this.default})`)} ${this.color.red(error) || ''}`)
+    } else {
+      CMD.write(`${this.message} ${this.color.red(error) || ''}`)
+    }
+
     CMD.interface.prompt()
   }
 
-  proceed () {
+  proceed (offset = 0) {
     let i = 0
+
+    if (!this.data && this.default) {
+      this.data = this.default
+    }
+
     while (i < this.validations.length) {
+      // console.log(this.data, this.validations[i].callback(this.data), isNaN(parseInt(this.data)))
       if (this.validations[i].callback(this.data)) {
         this.prompt(this.validations[i].message)
+        // If data is not set to empty, data addons to previous data
+        this.data = ''
         return
       }
       i++
     }
-
-    // this.writeNewLine()
 
     this.process(this.parseInput(this.data) || this.items[this.index])
 
     if (this.done) {
       this.done(this.getData(), this.parseInput(this.data) || this.items[this.index], this.next)
     } else {
-      this.next(1) // Assigned at PromptManager.push
+      this.next(1 + offset) // Assigned at PromptManager.push
     }
   }
 

@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node ./src/index.js",
+    "ex1": "node ./src/index.js ./examples/getting-started.js",
     "build": "webpack --config ./webpack.config.js --mode production",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -23,8 +24,6 @@
   "homepage": "https://github.com/minnam/termiyou#readme",
   "dependencies": {
     "check-types": "^7.4.0",
-    "console-pos": "^1.0.2",
-    "g": "^2.0.1",
-    "window-size": "^1.1.1"
+    "get-cursor-position": "^1.0.5"
   }
 }
